@@ -1,0 +1,25 @@
+{
+  "seed": 42,
+  "start": "2025-05-01",
+  "end": "2026-10-31",
+  "rows": {
+    "customers": 20100,
+    "products": 400,
+    "orders": 25190,
+    "order_items": 44835,
+    "payments": 25115
+  },
+  "injected_defects": {
+    "customers_duplicate_rows": 100,
+    "customers_missing_email": 402,
+    "customers_invalid_email": 201,
+    "customers_wrong_date_format": 201,
+    "products_bad_price": 3,
+    "orders_duplicate_rows": 75,
+    "orders_unknown_customer": 50,
+    "orders_future_dated": 25,
+    "order_items_bad_quantity": 44,
+    "payments_amount_mismatch": 125,
+    "payments_method_text_variants": 251
+  }
+}
