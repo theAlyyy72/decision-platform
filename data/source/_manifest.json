@@ -3,23 +3,23 @@
   "start": "2025-05-01",
   "end": "2026-10-31",
   "rows": {
-    "customers": 20100,
+    "customers": 50250,
     "products": 400,
-    "orders": 25190,
-    "order_items": 44835,
-    "payments": 25115
+    "orders": 61841,
+    "order_items": 109823,
+    "payments": 61657
   },
   "injected_defects": {
-    "customers_duplicate_rows": 100,
-    "customers_missing_email": 402,
-    "customers_invalid_email": 201,
-    "customers_wrong_date_format": 201,
+    "customers_duplicate_rows": 250,
+    "customers_missing_email": 1005,
+    "customers_invalid_email": 502,
+    "customers_wrong_date_format": 502,
     "products_bad_price": 3,
-    "orders_duplicate_rows": 75,
-    "orders_unknown_customer": 50,
-    "orders_future_dated": 25,
-    "order_items_bad_quantity": 44,
-    "payments_amount_mismatch": 125,
-    "payments_method_text_variants": 251
+    "orders_duplicate_rows": 184,
+    "orders_unknown_customer": 123,
+    "orders_future_dated": 61,
+    "order_items_bad_quantity": 109,
+    "payments_amount_mismatch": 308,
+    "payments_method_text_variants": 616
   }
 }
