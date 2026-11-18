@@ -6,3 +6,7 @@ __pycache__/
 data/
 *.parquet
 .DS_Store
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
