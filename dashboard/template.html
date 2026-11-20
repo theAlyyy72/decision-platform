@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NovaMart Decision Platform</title>
+<style>
+:root{--bg:#dfe3db;--card:rgba(255,255,255,.62);--ink:#111;--mute:#6b6f68;--line:rgba(0,0,0,.08);--dark:#0e0f0e;--on:#f2f3ef;--hi:rgba(17,17,17,.1);
+box-sizing:border-box;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f110f;--card:rgba(255,255,255,.06);--ink:#eef0ea;--mute:#9aa096;--line:rgba(255,255,255,.1);--dark:#1c1e1b;--on:#f2f3ef;--hi:rgba(255,255,255,.14);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f110f;--card:rgba(255,255,255,.06);--ink:#eef0ea;--mute:#9aa096;--line:rgba(255,255,255,.1);--dark:#1c1e1b;--on:#f2f3ef;--hi:rgba(255,255,255,.14);color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 ui-sans-serif,-apple-system,"Segoe UI",Inter,sans-serif}
+.w{max-width:1180px;margin:0 auto;padding:16px}
+nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.logo{font-weight:700;margin-right:6px}.pill{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 14px;font:inherit;cursor:pointer;backdrop-filter:blur(14px)}
+.pill.on{background:var(--dark);color:var(--on);border-color:transparent}.sp{flex:1}
+h1{font-size:26px;margin:0 0 2px;letter-spacing:-.02em}.sub{color:var(--mute);margin-bottom:16px}
+.g{display:grid;gap:12px;grid-template-columns:repeat(12,1fr)}.c{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;backdrop-filter:blur(16px);min-width:0}
+.c.k{background:var(--dark);color:var(--on);border-color:var(--line)}.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+@media(max-width:820px){.s3,.s4,.s5,.s6,.s7,.s8{grid-column:span 12}.s3.h{grid-column:span 6}}
+.l{color:var(--mute);font-size:12px}.k .l{color:#9a9f96}.big{font-size:30px;font-weight:650;letter-spacing:-.03em;margin:4px 0}.d{font-size:12px}.up{color:#2f8f5b}.dn{color:#c2503d}
+h3{margin:0 0 10px;font-size:15px}.row{display:flex;align-items:center;gap:10px;margin:9px 0}.row b{flex:0 0 130px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{flex:1;height:7px;border-radius:9px;background:var(--hi);overflow:hidden}.bar i{display:block;height:100%;background:var(--ink);border-radius:9px}.v{flex:0 0 122px;text-align:right;color:var(--mute);font-size:12px}
+svg{width:100%;height:auto;display:block}svg text{fill:var(--mute);font-size:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{color:var(--mute);font-weight:500;text-align:left;padding:6px 6px}td{padding:7px 6px;border-top:1px solid var(--line)}.sc{overflow-x:auto}
+.chip{display:inline-block;padding:2px 9px;border-radius:99px;background:var(--hi);font-size:12px}.chip.fail{background:#c2503d;color:#fff}.chip.warn{background:#d6a43a;color:#111}.chip.pass{background:#2f8f5b;color:#fff}
+.heat td{text-align:center;padding:6px 2px}.v1 section{display:none}
+</style></head><body><div class="w">
+<nav><span class="logo">◐ NovaMart</span><span id="tabs"></span><span class="sp"></span><span class="pill" id="asof"></span><button class="pill on" id="th">Theme</button></nav>
+<div id="app"></div></div>
+<script id="d" type="application/json">__DATA__</script>
+<script>
+const D=JSON.parse(document.getElementById('d').textContent),$=s=>document.querySelector(s);
+const cr=n=>'₹'+new Intl.NumberFormat('en-IN',{notation:'compact',maximumFractionDigits:2}).format(n),num=n=>new Intl.NumberFormat('en-IN').format(Math.round(n)),pc=(x,d=1)=>x==null?'–':(x*100).toFixed(d)+'%';
+const M=D.series.month,L=M.at(-1),P=M.at(-2),dl=(a,b,f=pc)=>{const x=(a-b)/b;return `<span class="d ${x>=0?'up':'dn'}">${x>=0?'▲':'▼'} ${Math.abs(x*100).toFixed(1)}% vs prev month</span>`};
+const K=(l,v,x,cls='')=>`<div class="c s3 h ${cls}"><div class="l">${l}</div><div class="big">${v}</div>${x}</div>`;
+const rows=(a,f)=>a.map(f).join(''),mx=(a,k)=>Math.max(...a.map(d=>d[k]));
+function area(g){const p=D.series[g],W=640,H=210,x=i=>24+i*(W-48)/(p.length-1),m=mx(p,'net_revenue')*1.1,y=v=>H-26-v/m*(H-50),
+ ln=p.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(d.net_revenue).toFixed(1)).join(''),n=g=='month'?7:10,
+ lab=[0,Math.floor(p.length/2),p.length-1].map(i=>`<text x="${x(i)}" y="${H-8}" text-anchor="${i==0?'start':i==p.length-1?'end':'middle'}">${p[i].period_start.slice(0,n)}</text>`).join('');
+ return `<svg viewBox="0 0 ${W} ${H}"><path d="${ln}L${x(p.length-1)},${H-26}L24,${H-26}Z" fill="var(--ink)" opacity=".08"/><path d="${ln}" fill="none" stroke="var(--ink)" stroke-width="2"/>${lab}<text x="24" y="14">peak ${cr(m/1.1)}</text></svg>`}
+function nvr(){const W=640,H=170,m=mx(M,'active_customers'),bw=(W-30)/M.length;return `<svg viewBox="0 0 ${W} ${H}">`+M.map((d,i)=>{const h1=d.new_customers/m*(H-40),h2=d.repeat_customers/m*(H-40),x=20+i*bw;return `<rect x="${x}" y="${H-24-h1}" width="${bw-5}" height="${h1}" rx="3" fill="var(--ink)"/><rect x="${x}" y="${H-24-h1-h2}" width="${bw-5}" height="${h2}" rx="3" fill="var(--ink)" opacity=".28"/>`+(i%3==0?`<text x="${x}" y="${H-8}">${d.period_start.slice(2,7)}</text>`:'')}).join('')+`</svg><div class="l">■ new customers &nbsp; <span style="opacity:.5">■</span> repeat customers</div>`}
+const heat=v=>v==null?'<td class="l">–</td>':`<td style="background:rgba(47,143,91,${(v*1.6).toFixed(2)})">${pc(v,0)}</td>`;
+const V={
+overview:()=>`<h1>Overview</h1><div class="sub">Last full month: ${L.period_start.slice(0,7)} · data until ${D.as_of}</div><div class="g">
+${K('Net revenue',cr(L.net_revenue),dl(L.net_revenue,P.net_revenue),'k')}${K('Orders',num(L.orders),dl(L.orders,P.orders))}${K('Avg order value','₹'+num(L.avg_order_value),dl(L.avg_order_value,P.avg_order_value))}${K('Active customers',num(L.active_customers),dl(L.active_customers,P.active_customers))}
+<div class="c s8"><div style="display:flex;gap:8px;align-items:center;margin-bottom:6px"><h3 style="flex:1;margin:0">Net revenue</h3>${['day','week','month'].map(g=>`<button class="pill g-btn ${g=='month'?'on':''}" data-g="${g}">${g}</button>`).join('')}</div><div id="ar">${area('month')}</div></div>
+<div class="c k s4"><div class="l">Pipeline</div><div class="big">${D.run.status.toUpperCase()}</div><div class="l">Last run ${D.run.at.slice(0,16).replace('T',' ')} UTC</div><div class="row"><b style="flex:0 0 auto;color:#9a9f96">Cancellation</b><span>${pc(L.cancellation_rate)}</span></div><div class="row"><b style="flex:0 0 auto;color:#9a9f96">Returns</b><span>${pc(L.return_rate)}</span></div><div class="row"><b style="flex:0 0 auto;color:#9a9f96">On-time delivery</b><span>${pc(L.on_time_delivery_rate)}</span></div><div class="row"><b style="flex:0 0 auto;color:#9a9f96">Gross margin</b><span>${pc(L.gross_margin_pct)}</span></div></div>
+<div class="c s6"><h3>New vs repeat customers</h3>${nvr()}</div>
+<div class="c s6"><h3>Revenue by category</h3>${rows(D.categories,d=>`<div class="row"><b>${d.category}</b><div class="bar"><i style="width:${d.revenue_share/D.categories[0].revenue_share*100}%"></i></div><span class="v">${cr(d.revenue)} · ${pc(d.revenue_share,0)}</span></div>`)}</div>
+<div class="c s12"><h3>Top products</h3><div class="sc"><table><tr><th>Product</th><th>Category</th><th>Units</th><th>Revenue</th></tr>${rows(D.products,d=>`<tr><td>${d.product_name}</td><td>${d.category}</td><td>${num(d.units_sold)}</td><td>${cr(d.revenue)}</td></tr>`)}</table></div></div></div>`,
+customers:()=>{const k=D.customer_kpis;return `<h1>Customers</h1><div class="sub">Retention, repeat buying and RFM segments</div><div class="g">
+${K('Churn rate',pc(k.churn_rate),`<span class="l">${num(k.lapsed_customers)} of ${num(k.customers_with_orders)} silent 90+ days</span>`,'k')}${K('Repeat purchase rate',pc(k.repeat_purchase_rate),`<span class="l">${num(k.repeat_customers)} repeat buyers</span>`)}${K('Avg lifetime value','₹'+num(k.avg_lifetime_value),'<span class="l">net revenue per customer</span>')}${K('Active (90 days)',num(k.active_customers_90d),'<span class="l">ordered in last 90 days</span>')}
+<div class="c s7"><h3>Retention by first-order month</h3><div class="sc"><table class="heat"><tr><th>Cohort</th><th>Size</th><th>30d</th><th>60d</th><th>90d</th></tr>${rows(D.retention,d=>`<tr><td style="text-align:left">${d.cohort_month.slice(0,7)}</td><td>${num(d.cohort_size)}</td>${heat(d.retention_30d)}${heat(d.retention_60d)}${heat(d.retention_90d)}</tr>`)}</table></div></div>
+<div class="c s5"><h3>RFM segments</h3>${rows(D.rfm,d=>`<div class="row"><b>${d.segment.replace('_',' ')}</b><div class="bar"><i style="width:${d.customers/D.rfm[0].customers*100}%"></i></div><span class="v">${num(d.customers)}</span></div>`)}</div></div>`},
+churn:()=>{const t=D.model.test,n='model: '+D.model.name,m=t[n],r=t[Object.keys(t).find(x=>x.startsWith('rule'))];return `<h1>Churn risk</h1><div class="sub">Customers ranked by the model · churn = no order in the next 90 days</div><div class="g">
+${D.bands.sort((a,b)=>'hml'.indexOf(a.risk_band[0])-'hml'.indexOf(b.risk_band[0])).map((b,i)=>K(b.risk_band+' risk',num(b.customers),`<span class="l">avg probability ${pc(b.avg_prob,0)} · silent ${Math.round(b.avg_recency)} days</span>`,i?'':'k')).join('')}
+<div class="c s3 h"><div class="l">Test PR-AUC</div><div class="big">${m.pr_auc}</div><span class="l">rule baseline ${r.pr_auc}</span></div>
+<div class="c s7"><h3>Highest risk customers</h3><div class="sc"><table><tr><th>Customer</th><th>Probability</th><th>Silent (days)</th><th>Orders</th><th>Spend</th></tr>${rows(D.top_risk,d=>`<tr><td>${d.customer_id}</td><td>${pc(d.churn_probability,0)}</td><td>${num(d.recency_days)}</td><td>${d.orders_total}</td><td>₹${num(d.spend_total)}</td></tr>`)}</table></div></div>
+<div class="c s5"><h3>How good is the model?</h3><p class="l">On the held-out test month it ranks risky customers only slightly better than the simple rule “no order for 60 days” (PR-AUC ${m.pr_auc} vs ${r.pr_auc}). The top 10% it flags churn ${pc(m.precision_top10pct,0)} of the time, against ${pc(m.prevalence,0)} overall. The data is synthetic and most customers order rarely, so churn is hard to predict.</p></div></div>`},
+quality:()=>`<h1>Data quality</h1><div class="sub">Latest validation run · bad rows are quarantined, never deleted</div><div class="g">${D.quality.map(q=>`<div class="c s4"><div style="display:flex"><h3 style="flex:1">${q.table}</h3><span class="chip ${q.status}">${q.status}</span></div><div class="big">${pc(q.pct/100,2)}</div><div class="l">${num(q.quarantined)} of ${num(q.rows)} rows quarantined</div>${rows(q.rules,r=>`<div class="row"><b style="flex:1">${r[0].replace(/_/g,' ')}</b><span class="v">${num(r[1])} · ${r[2]}</span></div>`)}</div>`).join('')}</div>`};
+const names={overview:'Overview',customers:'Customers',churn:'Churn risk',quality:'Data quality'};
+function show(n){$('#app').innerHTML=V[n]();document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.n==n));document.querySelectorAll('.g-btn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.g-btn').forEach(x=>x.classList.toggle('on',x==b));$('#ar').innerHTML=area(b.dataset.g)})}
+$('#tabs').innerHTML=Object.keys(names).map(n=>`<button class="pill tab" data-n="${n}">${names[n]}</button>`).join(' ');
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.n));
+$('#asof').textContent='as of '+D.as_of;$('#th').onclick=()=>{const r=document.documentElement,dk=matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=(r.dataset.theme||(dk?'dark':'light'))=='dark'?'light':'dark'};show('overview');
+</script></body></html>
