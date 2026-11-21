@@ -130,3 +130,5 @@ docker push <ecr-url>:v1                          # then set image_tag and apply
 - The dashboard is a snapshot rebuilt by `python3 -m dp.dashboard`, not a live app.
 
 See [`docs/kpi_definitions.md`](docs/kpi_definitions.md) for how every KPI is calculated and [`docs/business_brief.md`](docs/business_brief.md) for goals, KPIs and service levels.
+
+Operations (alerts, redeploys, shutting down): see [`docs/runbook.md`](docs/runbook.md).
