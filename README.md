@@ -4,7 +4,8 @@ An end-to-end data platform for a fictional Indian online retailer: messy daily 
 
 All data is synthetic. No real personal data is used anywhere.
 
-![Dashboard](docs/dashboard.png)
+![Dashboard](image.png) 
+
 
 ## What it does
 
